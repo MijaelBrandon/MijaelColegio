@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Colegio Villa el Golf Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css' ) }}">
+    <link href="../static/css/signup.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+
+    <style>
+        body {
+            padding-top: 0px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #wrapper {
+            padding-left: 0px;
+
+            transition: all 0.4s;
+        }
+
+        #sidebar-wrapper {
+            width: 250px;
+            background-color: #343a40;
+            color: #fff;
+            position: fixed;
+            height: 100%;
+            overflow-y: auto;
+            z-index: 1;
+            transition: all 0.4s;
+        }
+
+        #page-content-wrapper {
+            margin-left: 250px;
+            transition: all 0.4s;
+        }
+
+        .sidebar-nav {
+            padding: 20px;
+            list-style: none;
+            /* Elimina las viñetas de la lista */
+            padding-left: 0;
+            /* Elimina el espacio izquierdo en la lista */
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #fff;
+            transition: background 0.3s;
+        }
+
+        .sidebar-nav a:hover {
+            background: #868e96;
+        }
+
+        .container-fluid {
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #dee2e6;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #343a40;
+            color: #fff;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        #banner {
+            text-align: center;
+            padding: 20px;
+            background-color: #343a40;
+            color: #fff;
+            margin-bottom: 30px;
+        }
+
+        #banner img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            background-color: #343a40;
+            padding: 10px;
+            color: #fff;
+        }
+
+        .left-column,
+        .right-column {
+            padding: 20px;
+        }
+
+        .card-container {
+            margin-bottom: 20px;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/getAlumnos',
+                success: function (res) {
+                    var cardContainer = $('<div>').addClass('card-container');
+                    var wishObj = JSON.parse(res);
+
+                    $.each(wishObj, function (index, value) {
+                        var card = $('<div>').addClass('card');
+                        var cardBody = $('<div>').addClass('card-body');
+
+                        $('<h4>').addClass('card-title').text(value.Title).appendTo(cardBody);
+                        $('<p>').addClass('card-text').text('Edad:' + value.Description).appendTo(cardBody);
+                        $('<p>').addClass('card-text').text('Celular:' + value.Date).appendTo(cardBody);
+                        $('<p>').addClass('card-text').text('Direccion:' + value.Taller).appendTo(cardBody);
+
+
+
+                        // Botón de Editar
+                        var editButton = $('<button>').addClass('btn btn-primary edit-btn').text('Editar')
+                            .attr('data-toggle', 'modal')
+                            .attr('data-target', '#editModal' + value.Id)
+                            .attr('data-id', value.Id);
+                        editButton.appendTo(cardBody);
+
+                        // Botón de Eliminar
+                        var deleteButton = $('<button>').addClass('btn btn-danger delete-btn').text('Eliminar')
+                            .attr('data-toggle', 'modal')
+                            .attr('data-target', '#deleteModal' + value.Id)
+                            .attr('data-id', value.Id);
+                        deleteButton.appendTo(cardBody);
+
+                        cardBody.appendTo(card);
+                        card.appendTo(cardContainer);
+                    });
+
+                    $('.container').append(cardContainer);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+
+    </script>
+</head>
+
+<body>
+    <div id="wrapper" class="toggled">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        <img src="https://mijaelparedes.site/img/logo3.png" alt="villa el golf" class="img-fluid">
+                        Colegio Villa el Golf
+                    </a>
+                </li>
+                <!-- Puedes agregar más elementos de la barra lateral aquí -->
+                <li>
+                    <a href="/dashboard">Docentes</a>
+                </li>
+                <li>
+                    <a href="/talleres">Talleres</a>
+                </li>
+                <li>
+                    <a href="/alumnos">Alumnos</a>
+                </li>
+                <li>
+                    <a href="/matriculas">Matriculas</a>
+                </li>
+                <li>
+                    <a href="/detalle_matricula">Imprimir detalle</a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Contenido del dashboard -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div id="banner">
+                    <img src="https://mijaelparedes.site/img/logo3.png" alt="villa el golf" class="img-fluid">
+                    <h1>Colegio Villa el Golf</h1>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="container">
+                            <div class="header">
+                                <h3 class="text-muted">Reporte de Alumnos</h3>
+                                <nav>
+                                    <ul class="nav nav-pills pull-right">
+                                        <li role="presentation"><a href="/showAddWish">Agregar Deseo</a></li>
+                                        <li role="presentation" class="active"><a href="/logout">&nbsp;Cerrar Sesión</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+
+                            <!-- Modales para Editar y Eliminar -->
+                            {% for wish in wishes %}
+                            <div class="modal fade" id="editModal{{ wish['Id'] }}" tabindex="-1" role="dialog"
+                                aria-labelledby="editModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editModalLabel">Editar Deseo</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="editForm{{ wish['Id'] }}" action="/editWish/{{ wish['Id'] }}"
+                                                method="post">
+                                                <div class="form-group">
+                                                    <label for="inputTitle">Nuevo Título:</label>
+                                                    <input type="text" class="form-control" id="inputTitle"
+                                                        name="inputTitle" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="inputDescription">Nueva Descripción:</label>
+                                                    <textarea class="form-control" id="inputDescription"
+                                                        name="inputDescription" required></textarea>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="input_Dni">Valide DNI:</label>
+                                                    <textarea class="form-control" id="input_Dni" name="input_Dni"
+                                                        required></textarea>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="deleteModal{{ wish['Id'] }}" tabindex="-1" role="dialog"
+                                aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel">Eliminar Alumno</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>¿Estás seguro de que deseas eliminar?</p>
+                                            <a href="/deleteAlumno/{{ wish['Id'] }}" class="btn btn-danger">Eliminar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <form class="form-horizontal" method="post" action="/addAlumno">
+                            <fieldset>
+
+                                <!-- Form Name -->
+                                <legend>Crear Nuevo Alumno</legend>
+
+                                <!-- Text input-->
+                                <div class="form-group">
+                                    <label class="col-md-9 control-label" for="txtTitle">Codigo</label>
+                                    <div class="col-md-9">
+                                        <input id="txtId" name="inputId" type="text" placeholder="Título"
+                                            class="form-control input-md">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-9 control-label" for="txtTitle">Nombre</label>
+                                    <div class="col-md-9">
+                                        <input id="txtTitle" name="inputNombre" type="text" placeholder="Título"
+                                            class="form-control input-md">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-9 control-label" for="txtTitle">Edad</label>
+                                    <div class="col-md-9">
+                                        <input id="txtTitle" name="inputEdad" type="text" placeholder="Título"
+                                            class="form-control input-md">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-9 control-label" for="txtTitle">Celular</label>
+                                    <div class="col-md-9">
+                                        <input id="txtTitle" name="inputCelular" type="text" placeholder="Título"
+                                            class="form-control input-md">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-9 control-label" for="txtTitle">Direccion</label>
+                                    <div class="col-md-9">
+                                        <input id="txtTitle" name="imputDireccion" type="text" placeholder="Título"
+                                            class="form-control input-md">
+                                    </div>
+                                </div>
+
+
+
+                                <!-- Button -->
+                                <div class="form-group">
+                                    <label class="col-md-6 control-label" for="singlebutton"></label>
+                                    <div class="col-md-6">
+                                        <input id="singlebutton" name="singlebutton" class="btn btn-primary"
+                                            type="submit" value="Publicar" />
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Agrega tu script personalizado para manejar el cambio de clase "toggled" del wrapper aquí -->
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+    <!-- Agrega tus enlaces a las hojas de estilo y scripts de Bootstrap aquí -->
+
+</body>
+
+</html>

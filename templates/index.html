@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Aplicación Web Colegio Villa el Golf</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css' ) }}">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h3 class="text-muted">Aplicación Web </h3>
+            <h1 class="text-muted">Colegio Villa el Golf </h1>
+
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation"><a href="showSignin">&nbsp;Iniciar Sesión</a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+
+        <div class="jumbotron">
+            <h1>¿Deseas crear tu lista de deseos?</h1>
+            <p class="lead"></p>
+            <p><a class="btn btn-lg btn-success" href="showSignUp" role="button">Registrate hoy!</a>
+            </p>
+        </div>
+
+        <footer class="footer">
+            <p>&copy; Maestría en Informática - UNSA</p>
+        </footer>
+
+    </div>
+</body>
+
+</html>

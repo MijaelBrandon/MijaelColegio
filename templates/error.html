@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <title>Unauthorized Access:: Aplicación Web de Deseos</title>
+ 
+ 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css' ) }}">
+ 
+ 
+</head>
+ 
+<body>
+ 
+    <div class="container">
+        <div class="header">
+            <h3 class="text-muted">Aplicación Web de Deseos</h3>
+            <nav>
+                <ul class="nav nav-pills pull-right">
+                    <li role="presentation" ><a href="/">Inicio</a></li>
+                    <li role="presentation" class="active"><a href="/showSignin">&nbsp;Iniciar Sesión</a></li>
+                    <li role="presentation" ><a href="/showSignUp">&nbsp;Registrarse</a></li>
+                </ul>
+            </nav>
+            
+        </div>
+ 
+        <div class="jumbotron">
+            <h1>{{error}}</h1>
+        </div>
+ 
+ 
+ 
+        <footer class="footer">
+            <p>&copy; Maestría en Informática - UNSA</p>
+        </footer>
+ 
+    </div>
+</body>
+ 
+</html>

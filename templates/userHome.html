@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Aplicación Web de Lista de Deseos</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css' ) }}">
+    <link href="../static/css/signup.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <style>
+        body {
+            margin: 20px;
+            padding-top: 10px;
+        }
+
+        #banner {
+            width: 100%;
+            height: 150px;
+            background-color: #007bff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .left-column,
+        .right-column {
+            padding: 20px;
+        }
+
+        .card-container {
+            margin-bottom: 20px;
+        }
+
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            margin-top: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        #banner img {
+            width: 100px;
+            /* ajusta el tamaño de la imagen según tus necesidades */
+            height: auto;
+            /* permite que la altura se ajuste proporcionalmente */
+            margin-right: 10px;
+            /* ajusta el margen derecho para separar la imagen del texto */
+        }
+    </style>
+    <script>
+        $(function () {
+            $.ajax({
+                url: '/getWish',
+                type: 'GET',
+                success: function (res) {
+                    var cardContainer = $('<div>').addClass('card-container');
+                    var wishObj = JSON.parse(res);
+
+                    $.each(wishObj, function (index, value) {
+                        var card = $('<div>').addClass('card');
+                        var cardBody = $('<div>').addClass('card-body');
+
+                        $('<h4>').addClass('card-title').text(value.Title).appendTo(cardBody);
+                        $('<p>').addClass('card-text').text(value.Description).appendTo(cardBody);
+
+                        // Botón de Editar
+                        var editButton = $('<button>').addClass('btn btn-primary edit-btn').text('Editar')
+                            .attr('data-toggle', 'modal')
+                            .attr('data-target', '#editModal' + value.Id)
+                            .attr('data-id', value.Id);
+                        editButton.appendTo(cardBody);
+
+                        // Botón de Eliminar
+                        var deleteButton = $('<button>').addClass('btn btn-danger delete-btn').text('Eliminar')
+                            .attr('data-toggle', 'modal')
+                            .attr('data-target', '#deleteModal' + value.Id)
+                            .attr('data-id', value.Id);
+                        deleteButton.appendTo(cardBody);
+
+                        cardBody.appendTo(card);
+                        card.appendTo(cardContainer);
+                    });
+
+                    $('.container').append(cardContainer);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+
+            // Manejar evento de envío del formulario de edición
+            $('.edit-btn').click(function () {
+                var wishId = $(this).data('id');
+                // Puedes hacer una petición Ajax para obtener los detalles del deseo y llenar el formulario de edición
+                // ...
+
+                // Ejemplo de redirección, ajusta según tu lógica
+                window.location.href = '/editWish/' + wishId;
+            });
+        });
+    </script>
+
+</head>
+
+<body>
+    <div id="banner">
+        <img src="https://mijaelparedes.site/img/logo3.png" alt="villa el golf">
+        <h1>Colegio Villa el Golf</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="container">
+                <div class="header">
+                    <h3 class="text-muted">Aplicación Web de Deseos</h3>
+                    <nav>
+                        <ul class="nav nav-pills pull-right">
+                            <li role="presentation"><a href="/showAddWish">Agregar Deseo</a></li>
+                            <li role="presentation" class="active"><a href="/logout">&nbsp;Cerrar Sesión</a></li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <!-- Modales para Editar y Eliminar -->
+                {% for wish in wishes %}
+                <div class="modal fade" id="editModal{{ wish['Id'] }}" tabindex="-1" role="dialog"
+                    aria-labelledby="editModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editModalLabel">Editar Deseo</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="editForm{{ wish['Id'] }}" action="/editWish/{{ wish['Id'] }}" method="post">
+                                    <div class="form-group">
+                                        <label for="inputTitle">Nuevo Título:</label>
+                                        <input type="text" class="form-control" id="inputTitle" name="inputTitle"
+                                            required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputDescription">Nueva Descripción:</label>
+                                        <textarea class="form-control" id="inputDescription" name="inputDescription"
+                                            required></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input_Dni">Nueva Descripción:</label>
+                                        <textarea class="form-control" id="input_Dni" name="input_Dni"
+                                            required></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="deleteModal{{ wish['Id'] }}" tabindex="-1" role="dialog"
+                    aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel">Eliminar Deseo</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>¿Estás seguro de que deseas eliminar este deseo?</p>
+                                <a href="/deleteWish/{{ wish['Id'] }}" class="btn btn-danger">Eliminar</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <form class="form-horizontal" method="post" action="/addWish">
+                <fieldset>
+
+                    <!-- Form Name -->
+                    <legend>Crea tu Deseo</legend>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                        <label class="col-md-9 control-label" for="txtTitle">Título</label>
+                        <div class="col-md-9">
+                            <input id="txtId" name="inputId" type="text" placeholder="Título"
+                                class="form-control input-md">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-9 control-label" for="txtTitle">Título</label>
+                        <div class="col-md-9">
+                            <input id="txtTitle" name="inputTitle" type="text" placeholder="Título"
+                                class="form-control input-md">
+                        </div>
+                    </div>
+
+                    <!-- Textarea -->
+                    <div class="form-group">
+                        <label class="col-md-9 control-label" for="txtPost">Descripción</label>
+                        <div class="col-md-9">
+                            <textarea class="form-control" id="txtPost" name="inputDescription"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Button -->
+                    <div class="form-group">
+                        <label class="col-md-6 control-label" for="singlebutton"></label>
+                        <div class="col-md-6">
+                            <input id="singlebutton" name="singlebutton" class="btn btn-primary" type="submit"
+                                value="Publicar" />
+                        </div>
+                    </div>
+
+                </fieldset>
+            </form>
+        </div>
+        <footer class="footer">
+            <p>&copy; Maestría en Informática - UNSA</p>
+        </footer>
+    </div>
+
+
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Aplicación Web de Deseos</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css' ) }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css' ) }}">
+    <link href="../static/css/signup.css" rel="stylesheet">
+    <script src="../static/js/jquery-1.11.2.js"></script>
+    <script src="../static/js/signUp.js"></script>
+   
+  </head>
+
+  <body>
+
+    <div class="container">
+      <div class="header">
+        <h3 class="text-muted">Aplicación Web de Deseos</h3>
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation" ><a href="/">Inicio</a></li>
+            <li role="presentation"><a href="/showSignin">&nbsp;Iniciar Sesión</a></li>
+          </ul>
+        </nav>
+        
+      </div>
+
+      <div class="jumbotron">
+        <h1>Completa el siguiente formulario</h1>
+        <form class="form-signin">
+        
+        <label for="inputDNI" class="sr-only">DNI</label>
+        <input type="name" name="inputDNI" id="inputDNI" class="form-control" placeholder="DNI" required autofocus>
+
+        <label for="inputNombre" class="sr-only">Nombres</label>
+        <input type="name" name="inputNombre" id="inputNombre" class="form-control" placeholder="Nombre" required autofocus>
+
+        <label for="inputP_Apellido" class="sr-only">P_Apellido</label>
+        <input type="name" name="inputP_Apellido" id="inputP_Apellido" class="form-control" placeholder="Primer Apellido" required autofocus>
+
+        <label for="inputS_Apellido" class="sr-only">S_Apellido</label>
+        <input type="name" name="inputS_Apellido" id="inputS_Apellido" class="form-control" placeholder="Segundo Apellido" required autofocus>
+
+        <label for="inputDireccion" class="sr-only">Direccion</label>
+        <input type="name" name="inputDireccion" id="inputDireccion" class="form-control" placeholder="Dirección" required autofocus>
+
+        <label for="inputTelefono" class="sr-only">Telefono</label>
+        <input type="name" name="inputTelefono" id="inputTelefono" class="form-control" placeholder="Teléfono" required autofocus>
+
+        <label for="inputEmail" class="sr-only">Email</label>
+        <input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+
+        <label for="inputPassword" class="sr-only">Contraseña</label>
+        <input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Contraseña" required>
+        
+        <button id="btnSignUp" class="btn btn-lg btn-primary btn-block" type="button">Registrarse</button>
+      </form>
+      </div>
+      <footer class="footer">
+        <p>&copy; Maestría en Informática - UNSA</p>
+      </footer>
+
+    </div>
+  </body>
+</html>
+
+
+
+
+
+
+
